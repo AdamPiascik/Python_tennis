@@ -48,3 +48,16 @@ def listPlayerStats(all_players):
     print("\nHere are all the players in the specified list and their attributes:\n")
     for player in all_players:
         player.printProfile()
+
+def playerSearch(name, list):
+    for player in list:
+        if player.name == name:
+            break
+    return player
+
+def addPlayersFromFile(filename, list):
+    list_file = open(filename, "r")
+    for line in list_file:
+        name, skill = line.split("\t")
+        list.append(Player(name, float(skill)))
+    list_file.close()
