@@ -1,0 +1,5 @@
+Roger Federer	0.95
+Novak Djokovic	0.98
+Rafael Nadal	0.97
+Andy Murray	0.91
+Juan Martin Del Potro	0.93
