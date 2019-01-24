@@ -22,7 +22,9 @@ current_sim = tennisSim.InitialiseSimulation(player1, player2)
 
 # Performs a point-playing simulation and stores the win rate of each player #
 current_sim.resetSim()
-current_sim.runSimulation("sets", 10000)
 # current_sim.runSimulation("points", 10000)
+# current_sim.runSimulation("games", 10000)
+# current_sim.runSimulation("sets", 10000)
+current_sim.runSimulation("matches", 100)
 # print(current_sim.win_record)
 current_sim.printResults()
