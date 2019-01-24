@@ -1,7 +1,7 @@
 Roger Federer,Male,0.95
 Novak Djokovic,Male,0.98
 Rafael Nadal,Male,0.97
-Andy Murray,Male,0.91
+Andy Murray,Male,0.96
 Juan Martin Del Potro,Male,0.93
 Serena Williams,Female,0.99
 Dinara Safina,Female,0.97
