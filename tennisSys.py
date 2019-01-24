@@ -33,20 +33,21 @@ class MakeSystem:
                 self.player_lists.update({"All players": []})
                 players_file = open("players.txt", "r")
                 for line in players_file:
-                        name, skill = line.split("\t")
-                        self.player_lists["All players"].append(Player(name, float(skill)))
+                        name, gender, skill = line.split(",")
+                        self.player_lists["All players"].append(Player(name, gender, float(skill)))
                 players_file.close()
 
 class Player:  
-        def __init__(self, name, skill_level):
+        def __init__(self, name, gender, skill_level):
                 self.name = name
+                self.gender = gender 
                 self.skill = skill_level
         
         def __repr__(self):
                 return self.name
     
         def stats(self):
-                stats = {"Skill":self.skill}
+                stats = {"Gender":self.gender, "Skill":self.skill}
                 return stats
     
         def printProfile(self):
