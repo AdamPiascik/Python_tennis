@@ -29,6 +29,7 @@ class MakeSimulation:
         self.wins = [0, 0]
         self.repeats = "Not yet specified"
         self.winRates = [0, 0]
+        self.run_yet = False
 
     def updateWinRate(self):
         self.winRates = [self.wins[0] / self.repeats, self.wins[1] / self.repeats]
@@ -45,15 +46,22 @@ class MakeSimulation:
                     self.wins[0] += 1
                     break
         self.updateWinRate()
+        self.run_yet = True
 
     def printResults(self):
+        if self.run_yet:
             print("\n {0} {1} were simulated. Here are the results:".format(self.repeats, self.type))
             print("\t{0} won {1} {2} ({3:.2%} win rate)".format(self.player1.name, self.wins[0], self.type, self.winRates[0]))
             print("\t{0} won {1} {2} ({3:.2%} win rate)".format(self.player2.name, self.wins[1], self.type, self.winRates[1]))
+        else:
+            print("The current simulation hasn't been run yet.")
 
     def resetScores(self):
         self.wins = [0, 0]
         self.winRates = [0, 0]
 
+    def printType(self):
+        print("The current simulation is for", self.type)
+
     def printPlayers(self):
-        print(self.players[0], self.players[1])
+        print("The players in the current simulation are {0} and {1}.".format(self.player1, self.player2))

@@ -16,8 +16,9 @@ player2 = sys.getPlayer("Roger Federer", "All players")
 current_sim = tennisSim.MakeSimulation(player1, player2)
 
 # Print various useful information about the current simulation #
-current_sim.printPlayers
-current_sim.printResults
+# current_sim.printPlayers()
+# current_sim.printType()
+# current_sim.printResults()
 
 # Performs a point-playing simulation and stores the win rate of each player #
 current_sim.simulatePoints(10000)
