@@ -9,7 +9,7 @@ class MakeSystem:
                         print("\t{0}".format(list))
 
         def listPlayerStats(self, list):
-                print("\nHere are all the players in the specified list and their attributes:\n")
+                print("\nHere are all the players listed in '{0}' along with their attributes:\n".format(list))
                 for player in self.player_lists[list]:
                         player.printProfile()
         
@@ -30,11 +30,11 @@ class MakeSystem:
                 return player_in_list
 
         def addAllPlayersFromFile(self):
-                self.player_lists.update({"All players": []})
+                self.player_lists.update({"All Players": []})
                 players_file = open("players.txt", "r")
                 for line in players_file:
                         name, gender, skill = line.split(",")
-                        self.player_lists["All players"].append(Player(name, gender, float(skill)))
+                        self.player_lists["All Players"].append(Player(name, gender, float(skill)))
                 players_file.close()
 
 class Player:  
