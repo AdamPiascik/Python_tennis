@@ -7,8 +7,8 @@ class InitialiseSimulation:
         self.type = "Not yet specified"
         self.repeats = "Not yet specified"
         self.run_yet = False
-        self.win_record = {"points":[0, 0], "sets":[0, 0], "games":[0, 0], "matches":[0, 0]}
-        self.win_rate_record = {"points":[0, 0], "sets":[0, 0], "games":[0, 0], "matches":[0, 0]}
+        self.win_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
+        self.win_rate_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
     
     def printType(self):
         print("The current simulation is for", self.type)
@@ -28,8 +28,8 @@ class InitialiseSimulation:
         self.type = "Not yet specified"
         self.repeats = "Not yet specified"
         self.run_yet = False
-        self.win_record = {"points":[0, 0], "sets":[0, 0], "games":[0, 0], "matches":[0, 0]}
-        self.win_rate_record = {"points":[0, 0], "sets":[0, 0], "games":[0, 0], "matches":[0, 0]}
+        self.win_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
+        self.win_rate_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
 
     def runSimulation(self, type, repeats):
         self.repeats = repeats
@@ -37,14 +37,14 @@ class InitialiseSimulation:
             self.type = "points"
             for i in range(repeats):
                 self.playPoint()
-        elif type == "sets":
-            self.type = "sets"
-            for i in range(repeats):
-                self.playSet()
         elif type == "games":
             self.type = "games"
             for i in range(repeats):
                 self.playGame()
+        elif type == "sets":
+            self.type = "sets"
+            for i in range(repeats):
+                self.playSet()
         elif type == "matches":
             self.type = "matches"
             for i in range(repeats):
@@ -65,12 +65,11 @@ class InitialiseSimulation:
                 return self.player1
                 break
     
-    def playSet(self):
+    def playGame(self):
         player1points = 0
         player2points = 0
-        set_winner = "None"
-        set_ongoing = True
-        while set_ongoing:
+        game_ongoing = True
+        while game_ongoing:
             # print("\nScore:\n\t{0}: {1}\t{2}: {3}".format(self.player1, player1points, self.player2, player2points))
             point_winner = self.playPoint()
             if point_winner == self.player1:
@@ -96,14 +95,58 @@ class InitialiseSimulation:
                     player2points += 15
 
             if player1points == 60:
+                game_winner = self.player1
+                self.win_record["games"][0] += 1
+                game_ongoing = False
+            elif player2points == 60:
+                game_winner = self.player2
+                self.win_record["games"][1] += 1
+                game_ongoing = False
+        return game_winner
+
+    def playSet(self):
+        player1games = 0
+        player2games = 0
+        set_ongoing = True
+        while set_ongoing:
+            # print("\nScore:\n\t{0}: {1}\t{2}: {3}".format(self.player1, player1games, self.player2, player2games))
+            game_winner = self.playGame()
+            if game_winner == self.player1:
+                player1games +=1
+            elif game_winner == self.player2:
+                player2games +=1
+
+            if player1games >= 6 and player1games >= player2games + 2:
                 set_winner = self.player1
                 self.win_record["sets"][0] += 1
                 set_ongoing = False
-            elif player2points == 60:
+            elif player2games >= 6 and player2games >= player1games + 2:
                 set_winner = self.player2
                 self.win_record["sets"][1] += 1
                 set_ongoing = False
-        return 
+        return set_winner
+
+    def playMatch(self):
+        player1sets = 0
+        player2sets = 0
+        match_ongoing = True
+        while match_ongoing:
+            # print("\nScore:\n\t{0}: {1}\t{2}: {3}".format(self.player1, player1sets, self.player2, player2sets))
+            set_winner = self.playSet()
+            if set_winner == self.player1:
+                player1sets += 1
+            elif set_winner == self.player2:
+                player2sets += 1
+            
+            if player1sets == 3:
+                match_winner = self.player1
+                self.win_record["matches"][0] += 1
+                match_ongoing = False
+            if player2sets == 3:
+                match_winner = self.player2
+                self.win_record["matches"][1] += 1
+                match_ongoing = False
+        return match_winner
 
     def updateWinRates(self):
         if self.type != "Not yet specifed":
