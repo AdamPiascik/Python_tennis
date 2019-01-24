@@ -53,6 +53,7 @@ class MakeSimulation:
 
     def resetScores(self):
         self.wins = [0, 0]
+        self.winRates = [0, 0]
 
     def printPlayers(self):
         print(self.players[0], self.players[1])
