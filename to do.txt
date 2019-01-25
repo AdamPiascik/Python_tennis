@@ -1,9 +1,9 @@
-create and auto-populate list of female and male players
 check two players are the same gender
 add male/female match-winning criteria
-change mechanism for determining point winner
-make player lists non case-sensitive
+make player list names non case-sensitive
+make searching for player names non case-sensitive
+if listPlayerStats called with a gendered list, do not display player gender
+change game mechanism to switch the player that strikes first after each game
 
-document tennisSys.py
 document tennisSim.py
 
