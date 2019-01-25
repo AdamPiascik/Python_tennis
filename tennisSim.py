@@ -1,4 +1,4 @@
-from random import random
+from random import uniform
 
 class InitialiseSimulation:
     def __init__(self, player1, player2):
@@ -56,14 +56,12 @@ class InitialiseSimulation:
 
     def playPoint(self):
         while (True):
-            if random() > self.player1.skill:
-                self.win_record["points"][1] += 1
-                return self.player2
-                break
-            if random() > self.player2.skill:
+            if uniform(0.85, 1.0) * self.player2.return_skill < uniform(0.85, 1.0) * self.player1.strike_skill:
                 self.win_record["points"][0] += 1
                 return self.player1
-                break
+            if uniform(0.85, 1.0) * self.player1.return_skill < uniform(0.85, 1.0) * self.player2.strike_skill:
+                self.win_record["points"][1] += 1
+                return self.player2
     
     def playGame(self):
         player1points = 0
