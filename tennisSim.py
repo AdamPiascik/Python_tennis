@@ -1,14 +1,23 @@
-from random import uniform
+import numpy as np
+from numpy import random
 
 class InitialiseSimulation:
     def __init__(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
+        self.server = player1
+        self.returner = player2
         self.type = "Not yet specified"
         self.repeats = "Not yet specified"
         self.run_yet = False
-        self.win_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
-        self.win_rate_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
+        self.win_record = { "points":{self.player1.name:0, self.player2.name:0},
+                            "games":{self.player1.name:0, self.player2.name:0},
+                            "sets":{self.player1.name:0, self.player2.name:0},
+                            "matches":{self.player1.name:0, self.player2.name:0}}
+        self.win_rate_record = { "points":{self.player1.name:0, self.player2.name:0},
+                            "games":{self.player1.name:0, self.player2.name:0},
+                            "sets":{self.player1.name:0, self.player2.name:0},
+                            "matches":{self.player1.name:0, self.player2.name:0}}
     
     def printType(self):
         print("The current simulation is for", self.type)
@@ -19,8 +28,8 @@ class InitialiseSimulation:
     def printResults(self):
         if self.run_yet:
             print("\n {0} {1} were simulated. Here are the results:".format(self.repeats, self.type))
-            print("\t{0} won {1} {2} ({3:.1%} win rate)".format(self.player1, self.win_record[self.type][0], self.type, self.win_rate_record[self.type][0]))
-            print("\t{0} won {1} {2} ({3:.1%} win rate)".format(self.player2, self.win_record[self.type][1], self.type, self.win_rate_record[self.type][1]))          
+            print("\t{0} won {1} {2} ({3:.1%} win rate)".format(self.player1, self.win_record[self.type][self.player1.name], self.type, self.win_rate_record[self.type][self.player1.name]))
+            print("\t{0} won {1} {2} ({3:.1%} win rate)".format(self.player2, self.win_record[self.type][self.player2.name], self.type, self.win_rate_record[self.type][self.player2.name]))          
         else:
             print("The current simulation hasn't been run yet.")
 
@@ -28,8 +37,14 @@ class InitialiseSimulation:
         self.type = "Not yet specified"
         self.repeats = "Not yet specified"
         self.run_yet = False
-        self.win_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
-        self.win_rate_record = {"points":[0, 0], "games":[0, 0], "sets":[0, 0], "matches":[0, 0]}
+        self.win_record = { "points":{self.player1.name:0, self.player2.name:0},
+                            "games":{self.player1.name:0, self.player2.name:0},
+                            "sets":{self.player1.name:0, self.player2.name:0},
+                            "matches":{self.player1.name:0, self.player2.name:0}}
+        self.win_rate_record = { "points":{self.player1.name:0, self.player2.name:0},
+                            "games":{self.player1.name:0, self.player2.name:0},
+                            "sets":{self.player1.name:0, self.player2.name:0},
+                            "matches":{self.player1.name:0, self.player2.name:0}}
 
     def runSimulation(self, type, repeats):
         self.repeats = repeats
@@ -55,15 +70,29 @@ class InitialiseSimulation:
         self.updateWinRates()
 
     def playPoint(self):
+        # print("\t", self.server.name, "is serving")
+        # print("\t", self.returner.name, "is returning")
+        # skills = [self.returner.return_skill / 20, self.server.strike_skill / 20, self.server.return_skill / 20, self.returner.strike_skill / 20]
+        server_return_skill = self.server.return_skill / 20
+        server_strike_skill = self.server.strike_skill / 20
+        returner_return_skill = self.returner.return_skill / 20
+        returner_strike_skill = self.returner.strike_skill / 20
         while (True):
-            if uniform(0.85, 1.0) * self.player2.return_skill < uniform(0.85, 1.0) * self.player1.strike_skill:
-                self.win_record["points"][0] += 1
-                return self.player1
-            if uniform(0.85, 1.0) * self.player1.return_skill < uniform(0.85, 1.0) * self.player2.strike_skill:
-                self.win_record["points"][1] += 1
-                return self.player2
+            if random.normal(loc=returner_return_skill) < random.normal(loc=server_strike_skill):
+                self.win_record["points"][self.server.name] += 1
+                # print("\t\t{0} wins the point!".format(self.server.name))
+                return self.server
+            # print("\t\t{0} returns!".format(self.returner.name))
+            if random.normal(loc=server_return_skill) < random.normal(loc=returner_strike_skill):
+                self.win_record["points"][self.returner.name] += 1
+                # print("\t\t{0} wins the point!".format(self.returner.name))
+                return self.returner
+            # print("\t\t{0} returns!".format(self.server.name))
     
     def playGame(self):
+        # print("Game", i + 1)
+        # print(self.server.name, "is serving")
+        # print(self.returner.name, "is returning")
         player1points = 0
         player2points = 0
         game_ongoing = True
@@ -71,35 +100,50 @@ class InitialiseSimulation:
             # print("\nScore:\n\t{0}: {1}\t{2}: {3}".format(self.player1, player1points, self.player2, player2points))
             point_winner = self.playPoint()
             if point_winner == self.player1:
-                if player1points == 45:
-                    if player2points == 45:
+                if player1points == 30:
+                    player1points += 10
+                elif player1points == 40:
+                    if player2points == 40:
                         player1points = "AD"
                     elif player2points =="AD":
-                        player2points = 45
+                        player2points = 40
+                    else:
+                        player1points = 50
                 elif player1points == "AD":
-                    player1points = 60
+                    player1points = 50
                 else:
                     player1points += 15
 
             elif point_winner == self.player2:
-                if player2points == 45:
-                    if player1points == 45:
+                if player2points == 30:
+                    player2points += 10
+                elif player2points == 40:
+                    if player1points == 40:
                         player2points = "AD"
                     elif player1points =="AD":
-                        player1points = 45
+                        player1points = 40
+                    else:
+                        player1points = 50
                 elif player2points == "AD":
-                    player2points = 60
+                    player2points = 50
                 else:
                     player2points += 15
 
-            if player1points == 60:
+            if player1points == 50:
                 game_winner = self.player1
-                self.win_record["games"][0] += 1
+                self.win_record["games"][self.player1.name] += 1
                 game_ongoing = False
-            elif player2points == 60:
+            elif player2points == 50:
                 game_winner = self.player2
-                self.win_record["games"][1] += 1
+                self.win_record["games"][self.player2.name] += 1
                 game_ongoing = False
+        if self.server == self.player1:
+            self.server = self.player2
+            self.returner = self.player1
+        elif self.server == self.player2:
+            self.server = self.player1
+            self.returner = self.player2
+        # print("\t", game_winner.name, "won!")
         return game_winner
 
     def playSet(self):
@@ -116,11 +160,11 @@ class InitialiseSimulation:
 
             if player1games >= 6 and player1games >= player2games + 2:
                 set_winner = self.player1
-                self.win_record["sets"][0] += 1
+                self.win_record["sets"][self.player1.name] += 1
                 set_ongoing = False
             elif player2games >= 6 and player2games >= player1games + 2:
                 set_winner = self.player2
-                self.win_record["sets"][1] += 1
+                self.win_record["sets"][self.player2.name] += 1
                 set_ongoing = False
         return set_winner
 
@@ -138,16 +182,17 @@ class InitialiseSimulation:
             
             if player1sets == 3:
                 match_winner = self.player1
-                self.win_record["matches"][0] += 1
+                self.win_record["matches"][self.player1.name] += 1
                 match_ongoing = False
             if player2sets == 3:
                 match_winner = self.player2
-                self.win_record["matches"][1] += 1
+                self.win_record["matches"][self.player2.name] += 1
                 match_ongoing = False
         return match_winner
 
     def updateWinRates(self):
         if self.type != "Not yet specifed":
-            self.win_rate_record[self.type] = [self.win_record[self.type][0] / self.repeats, self.win_record[self.type][1] / self.repeats]
+            self.win_rate_record[self.type][self.player1.name] = self.win_record[self.type][self.player1.name] / self.repeats
+            self.win_rate_record[self.type][self.player2.name] = self.win_record[self.type][self.player2.name] / self.repeats
         else:
             print("Can't update win rates because simulation hasn't been run yet.")
