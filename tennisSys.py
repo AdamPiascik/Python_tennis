@@ -18,17 +18,21 @@ class MakeSystem:
                         print("\t{0}".format(list))
 
         # This prints the names and attributes of all players in a given list.
-        def listPlayerStats(self, list):
-                print("\nHere are all the players listed in '{0}' along with their attributes:\n".format(list))
-                for player in self.player_lists[list]:
-                        player.printProfile()
+        def listPlayerStats(self, list_name):
+                print("\nHere are all the players listed in '{0}' along with their attributes:\n".format(list_name.title()))
+                if list_name.title() == "Male Players" or list_name.title() == "Female Players":
+                        for player in self.player_lists[list_name.title()]:
+                                player.printProfile(skip="gender")
+                else:
+                        for player in self.player_lists[list_name.title()]:
+                                player.printProfile()
         
         # This searches a player list (using the playerSearch function) for the
         # name of a player. If found, it returns the player as a Player object.
         # If not found, it prints a message.
         def getPlayer(self, name, list):
                 if self.playerSearch(name, list):
-                        for player in self.player_lists[list]:
+                        for player in self.player_lists[list.title()]:
                                 if player.name == name:
                                         return player
                 else:
@@ -38,8 +42,8 @@ class MakeSystem:
         # returns True; if not, False.
         def playerSearch(self, searched_name, list):
                 player_in_list = False
-                for player in self.player_lists[list]:
-                        if player.name == searched_name:
+                for player in self.player_lists[list.title()]:
+                        if player.name.lower() == searched_name.lower():
                                 player_in_list = True
                                 break
                 return player_in_list
@@ -51,8 +55,8 @@ class MakeSystem:
                 self.player_lists["All Players"] = []
                 players_file = open("players.txt", "r")
                 for line in players_file:
-                        name, gender, strike_skill, return_skill = line.split(",")
-                        self.player_lists["All Players"].append(Player(name, gender, float(strike_skill), float(return_skill)))
+                        name, gender, skill = line.split(",")
+                        self.player_lists["All Players"].append(Player(name, gender, float(skill)))
                 players_file.close()
 
         # Creates and populates two lists for male and female players, based on
@@ -70,23 +74,27 @@ class MakeSystem:
 # information about each player.
 class Player:  
         # Creates a new Player object and initialises it with some attributes.
-        def __init__(self, name, gender, strike_skill, return_skill):
+        def __init__(self, name, gender, skill):
                 self.name = name
                 self.gender = gender 
-                self.strike_skill = strike_skill
-                self.return_skill = return_skill
+                self.skill = skill
         # Changes how the Player object is displayed if printed.
         def __repr__(self):
                 return self.name
     
         # Creates a dictionary of player attributes
         def stats(self):
-                stats = {"Gender":self.gender, "Strike Skill":self.strike_skill, "Return Skill":self.return_skill}
+                stats = {"Gender":self.gender, "Skill":self.skill}
                 return stats
 
         # Prints a list of all player attributes
-        def printProfile(self):
+        def printProfile(self, skip="none"):
                 print(self.name)
-                player_stats = self.stats()
-                for stat in player_stats:
-                        print("  ",stat, ":", player_stats[stat])
+                player_stats = self.stats()                
+                if skip == "gender":
+                        for stat in player_stats:
+                                if stat != "Gender":
+                                        print("  ",stat, ":", player_stats[stat])
+                else:
+                        for stat in player_stats:
+                                print("  ",stat, ":", player_stats[stat])
