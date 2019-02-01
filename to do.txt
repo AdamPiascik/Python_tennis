@@ -1,6 +1,7 @@
 add male/female match-winning criteria
-make player list names non case-sensitive
-make searching for player names non case-sensitive
 if listPlayerStats called with a gendered list, do not display player gender
+add a time-dependency
+add scorecard functionality
+use generators in runSimulation
 
 document tennisSim.py
