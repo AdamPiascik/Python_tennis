@@ -1,10 +1,10 @@
-Roger Federer,Male,89,89
-Novak Djokovic,Male,91,95
-Rafael Nadal,Male,92,93
-Andy Murray,Male,88,90
-Juan Martin Del Potro,Male,89,88
-Serena Williams,Female,95,92
-Dinara Safina,Female,92,92
-Svetlana Kuznetsova,Female,91,92
-Caroline Wozniacki,Female,89,92
-Elena Dementieva,Female,88,88
+Roger Federer,Male,90
+Novak Djokovic,Male,93
+Rafael Nadal,Male,92
+Andy Murray,Male,88
+Juan Martin Del Potro,Male,89
+Serena Williams,Female,95
+Dinara Safina,Female,92
+Svetlana Kuznetsova,Female,91
+Caroline Wozniacki,Female,89
+Elena Dementieva,Female,88
